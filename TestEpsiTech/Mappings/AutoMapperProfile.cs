@@ -9,7 +9,11 @@ namespace TestEpsiTech.Mappings
         public AutoMapperProfile()
         {
             CreateMap<TaskDto, TaskModel>();
-            CreateMap<TaskModel, TaskDto>(); 
+            CreateMap<TaskDto, TaskLiteDto>();
+            CreateMap<TaskModel, TaskDto>();
+            CreateMap<TaskModel, TaskLiteDto>();
+            CreateMap<TaskLiteDto, TaskDto>();
+            CreateMap<TaskLiteDto, TaskModel>();
             CreateMap<List<TaskModel>, List<TaskDto>>().ConvertUsing(MapTaskModelsToDtos);
         }
 

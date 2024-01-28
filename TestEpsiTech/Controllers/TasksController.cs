@@ -21,7 +21,7 @@ namespace TestEpsiTech.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] TaskDto model)
+        public async Task<IActionResult> Create([FromBody] TaskLiteDto model)
         {
             _logger.LogInformation("Received request to create a new task");
 
@@ -93,10 +93,10 @@ namespace TestEpsiTech.Controllers
             }
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Update([FromBody] TaskDto model)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update([FromBody] TaskLiteDto model, int id)
         {
-            _logger.LogInformation("Received request to update task with id: {id}", model.Id);
+            _logger.LogInformation("Received request to update task with id: {id}", id);
 
             if (!ModelState.IsValid)
             {
@@ -106,19 +106,19 @@ namespace TestEpsiTech.Controllers
 
             try
             {
-                var task = await _tasksService.UpdateTaskAsync(model);
+                var task = await _tasksService.UpdateTaskAsync(model, id);
                 if (task == null)
                 {
-                    _logger.LogWarning("Task with id {id} not found", model.Id);
+                    _logger.LogWarning("Task with id {id} not found", id);
                     return NotFound();
                 }
 
-                _logger.LogInformation("Task with id {id} has been updated", model.Id);
+                _logger.LogInformation("Task with id {id} has been updated", id);
                 return Ok(task);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while updating the task with id {taskId}", model.Id);
+                _logger.LogError(ex, "An error occurred while updating the task with id {taskId}", id);
                 return StatusCode(500, "An error occurred while updating the task");
             }
         }

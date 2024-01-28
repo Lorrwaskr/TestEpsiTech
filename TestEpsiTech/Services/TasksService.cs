@@ -17,7 +17,7 @@ namespace TestEpsiTech.Services
             _mapper = mapper;
         }
 
-        public async Task<TaskDto> CreateTaskAsync(TaskDto model)
+        public async Task<TaskDto> CreateTaskAsync(TaskLiteDto model)
         {
             var taskModel = _mapper.Map<TaskModel>(model);
             var createdTask = await _tasksRepository.CreateAsync(taskModel);
@@ -36,9 +36,10 @@ namespace TestEpsiTech.Services
             return _mapper.Map<List<TaskDto>>(tasks);
         }
 
-        public async Task<TaskDto?> UpdateTaskAsync(TaskDto model)
+        public async Task<TaskDto?> UpdateTaskAsync(TaskLiteDto model, int id)
         {
             var taskModel = _mapper.Map<TaskModel>(model);
+            taskModel.Id = id;
             var updatedTask = await _tasksRepository.UpdateAsync(taskModel);
             return _mapper.Map<TaskDto>(updatedTask);
         }

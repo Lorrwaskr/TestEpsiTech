@@ -18,6 +18,7 @@ namespace TestEpsiTech.Data.Repositories
         {
             model.CreationDate = DateTime.UtcNow;
             model.LastUpdateDate = DateTime.UtcNow;
+            model.Id = await GetLastTaskIdAsync() + 1;
             await _dbContext.Tasks.AddAsync(model);
             await _dbContext.SaveChangesAsync();
             return model;
@@ -59,6 +60,15 @@ namespace TestEpsiTech.Data.Repositories
             _dbContext.Tasks.Remove(existingTask);
             await _dbContext.SaveChangesAsync();
             return existingTask;
+        }
+
+        private async Task<int> GetLastTaskIdAsync()
+        {
+            var lastTask = await _dbContext.Tasks
+                .OrderByDescending(t => t.Id)
+                .FirstOrDefaultAsync();
+            if (lastTask == null) { return 0; }
+            else { return lastTask.Id; }
         }
     }
 }
